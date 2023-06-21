@@ -5,8 +5,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "gitHistory.showEditorTitleMenuBarIcons": false,
   "files.exclude": {
-    "**/lib": true,
-    "**/esm": true,
+    "**/lib": false,
+    "**/esm": false,
     "**/sdk": false,
     "**/tsconfig.tsbuildinfo": true,
     "**/schema.json": true,
