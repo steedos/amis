@@ -1881,7 +1881,7 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
 }
 ```
 
-### 通过 api 导出 CSV
+#### 通过 api 导出 CSV
 
 > 1.4.0 及以上版本
 
@@ -1897,6 +1897,61 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
             "type": "export-csv",
             "label": "全量导出 CSV",
             "api": "/api/mock2/sample"
+        }
+    ],
+    "columns": [
+        {
+            "name": "id",
+            "label": "ID"
+        },
+        {
+            "name": "engine",
+            "label": "Rendering engine"
+        },
+        {
+            "name": "browser",
+            "label": "Browser"
+        },
+        {
+            "name": "platform",
+            "label": "Platform(s)"
+        },
+        {
+            "name": "version",
+            "label": "Engine version"
+        },
+        {
+            "name": "grade",
+            "label": "CSS grade",
+            "type": "mapping",
+            "map": {
+                "*": "<span class=\"label label-info\">${grade}</span>"
+            }
+        }
+    ]
+}
+```
+
+#### 自定义导出 CSV 的文件名
+
+> 1.4.0 及以上版本
+
+`export-csv` 可以单独配置 `api` 实现导出全量功能，这个 api 的返回结果和 CRUD 类似
+
+```schema: scope="body"
+{
+    "type": "crud",
+    "syncLocation": false,
+    "api": "/api/mock2/sample",
+    "data": {
+        "name": "123"
+    },
+    "headerToolbar": [
+        {
+            "type": "export-csv",
+            "label": "自定义导出 CSV",
+            "api": "/api/mock2/sample",
+            "filename": "自定义文件名${name}"
         }
     ],
     "columns": [
@@ -2127,6 +2182,60 @@ crud 组件支持通过配置`headerToolbar`和`footerToolbar`属性，实现在
     ]
 }
 ```
+
+#### 指定导出行
+
+> 3.2.0 及以上版本
+
+可以通过配置 `rowSlice` 属性来控制导出哪些行
+
+```schema: scope="body"
+{
+    "type": "crud",
+    "syncLocation": false,
+    "api": "/api/mock2/sample",
+    "headerToolbar": [{
+        "type": "export-excel",
+        "label": "导出 1, 4, 5 行",
+        "rowSlice": "0,3:5"
+    }],
+    "columns": [
+        {
+            "name": "id",
+            "label": "ID"
+        },
+        {
+            "name": "engine",
+            "label": "Rendering engine"
+        },
+        {
+            "name": "browser",
+            "label": "Browser"
+        },
+        {
+            "name": "platform",
+            "label": "Platform(s)"
+        },
+        {
+            "name": "version",
+            "label": "Engine version"
+        },
+        {
+            "name": "grade",
+            "label": "CSS grade"
+        }
+    ]
+}
+```
+
+`rowSlice` 支持以下写法
+
+- 取单个值 '1,2,3'，代表取 1、2、3 索引的内容
+- 取范围 '3:10'，代表取 3-9 索引的内容
+  - ':' 代表所有行
+  - '1:' 代表从第二行开始到结束
+  - 结束可以是负数 ':-1'，代表除了最后一个元素的所有元素，开始为空代表 0
+- 前两种的组合 '1,3:10'，代表取 1 索引和 3-9 索引的内容
 
 #### 通过 api 导出 Excel
 
