@@ -111,7 +111,7 @@ amis 只能实现前端低代码，如果需要完整的低代码平台推荐使
 set -e
 
 # 停用加密
-sed -i '' -e 's/fis.plugin('terser')/null/g' ./fis-conf.js
+sed -i '' -e "s/fis.plugin('terser')/null/g" ./fis-conf.js
 
 # 替换 NODE_ENV
 sed -i '' -e 's/NODE_ENV=production/NODE_ENV=development/g' ./packages/amis/build.sh
