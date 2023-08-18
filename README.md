@@ -108,7 +108,6 @@ amis 只能实现前端低代码，如果需要完整的低代码平台推荐使
 ## 发布 Dev 版本
 
 ```
-set -e
 
 # 停用加密
 sed -i '' -e "s/fis.plugin('terser')/null/g" ./fis-conf.js
