@@ -104,3 +104,25 @@ npm run release
 ## 低代码平台
 
 amis 只能实现前端低代码，如果需要完整的低代码平台推荐使用[爱速搭](https://aisuda.bce.baidu.com/aisuda-docs/)。
+
+## 发布 Dev 版本
+
+```
+set -e
+
+# 停用加密
+sed -i '' -e 's/fis.plugin('terser')/null/g' ./fis-conf.js
+
+# 替换 NODE_ENV
+sed -i '' -e 's/NODE_ENV=production/NODE_ENV=development/g' ./packages/amis/build.sh
+for f in $(find ./packages -name "package.json"); do
+  sed -i '' -e 's/NODE_ENV=production/NODE_ENV=development/g' $f
+done
+
+npm run build --workspaces
+
+cd packages/amis
+sed -i '' -e 's/\"name\": \"amis/\"name\": \"@steedos\/amis-dev/g' ./package.json
+
+npm publish --public
+```
