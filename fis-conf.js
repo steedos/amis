@@ -469,15 +469,15 @@ if (fis.project.currentMedia() === 'publish-sdk') {
 
   sdkEnv.match('/examples/mod.js', {
     isMod: false,
-    optimizer: fis.plugin('terser')
+    optimizer: null, // fis.plugin('terser'),
   });
 
   // Steedos: 禁用optimizer: terser加密
   sdkEnv.match('*.{js,jsx,ts,tsx}', {
     optimizer: null, // fis.plugin('terser'),
-    moduleId: function (m, path) {
-      return fis.util.md5(package.version + 'amis-sdk' + path);
-    }
+    // moduleId: function (m, path) {
+    //   return fis.util.md5(package.version + 'amis-sdk' + path);
+    // }
   });
 
   sdkEnv.match('::package', {
@@ -1010,7 +1010,7 @@ if (fis.project.currentMedia() === 'publish-sdk') {
   });
 
   ghPages.match('*.{js,ts,tsx,jsx}', {
-    optimizer: fis.plugin('terser'),
+    optimizer: null, // fis.plugin('terser'),
     useHash: true
   });
 
