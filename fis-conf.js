@@ -442,14 +442,15 @@ if (fis.project.currentMedia() === 'publish-sdk') {
 
   env.match('/examples/mod.js', {
     isMod: false,
-    optimizer: fis.plugin('terser')
+    optimizer: null, //fis.plugin('terser')
   });
 
+  // Steedos 不加密 
   env.match('*.{js,jsx,ts,tsx}', {
-    optimizer: fis.plugin('terser'),
-    moduleId: function (m, path) {
-      return fis.util.md5(package.version + 'amis-sdk' + path);
-    }
+    optimizer: null, //fis.plugin('terser'),
+    // moduleId: function (m, path) {
+    //   return fis.util.md5(package.version + 'amis-sdk' + path);
+    // }
   });
 
   env.match('::package', {
