@@ -7,7 +7,7 @@
   "files.exclude": {
     "**/lib": true,
     "**/esm": true,
-    "**/sdk": true,
+    "**/sdk": false,
     "**/tsconfig.tsbuildinfo": true,
     "**/schema.json": true,
     "**/lerna-debug.log": true,
@@ -18,7 +18,7 @@
   "search.exclude": {
     "**/lib": true,
     "**/esm": true,
-    "**/sdk": true,
+    "**/sdk": false,
     "**/tsconfig.tsbuildinfo": true,
     "**/schema.json": true,
     "**/lerna-debug.log": true,

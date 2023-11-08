@@ -472,8 +472,9 @@ if (fis.project.currentMedia() === 'publish-sdk') {
     optimizer: fis.plugin('terser')
   });
 
+  // Steedos: 禁用optimizer: terser加密
   sdkEnv.match('*.{js,jsx,ts,tsx}', {
-    optimizer: fis.plugin('terser'),
+    optimizer: null, // fis.plugin('terser'),
     moduleId: function (m, path) {
       return fis.util.md5(package.version + 'amis-sdk' + path);
     }
