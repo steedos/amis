@@ -1,7 +1,7 @@
-import {ListenerAction, ListenerContext, runActions} from '../actions/Action';
-import {RendererProps} from '../factory';
-import {IScopedContext} from '../Scoped';
-import {createObject, extendObject} from './object';
+import { ListenerAction, ListenerContext, runActions } from '../actions/Action';
+import { RendererProps } from '../factory';
+import { IScopedContext } from '../Scoped';
+import { createObject, extendObject } from './object';
 import debounce from 'lodash/debounce';
 
 export interface debounceConfig {
@@ -74,7 +74,7 @@ export function createRendererEvent<T extends RendererEventContext>(
 ): RendererEvent<T> {
   const rendererEvent: RendererEvent<T> = Object.defineProperties(
     {
-      context: extendObject({pristineData: context.data}, context),
+      context: extendObject({ pristineData: context.data }, context),
       type,
       prevented: false,
       stoped: false,
@@ -162,12 +162,11 @@ export const bindEvent = (renderer: any) => {
       }
     }
     return (eventName?: string) => {
+      console.warn('165=====>', eventName)
       // eventName用来避免过滤广播事件
       rendererEventListeners = rendererEventListeners.filter(
         (item: RendererEventListener) =>
-          item.renderer === renderer && eventName !== undefined
-            ? item.type !== eventName
-            : true
+          (item: RendererEventListener) => item.renderer !== renderer
       );
     };
   }
@@ -275,7 +274,7 @@ export async function dispatchEvent(
     }
 
     if (listener?.track) {
-      const {id: trackId, name: trackName} = listener.track;
+      const { id: trackId, name: trackName } = listener.track;
       renderer?.props?.env?.tracker({
         eventType: listener.type,
         eventData: {
@@ -312,13 +311,13 @@ export const resolveEventData = (
     props.data,
     props.name && valueKey
       ? {
-          ...data,
-          [props.name]: data[valueKey],
-          __rendererData: {
-            ...props.data,
-            [props.name]: data[valueKey]
-          }
+        ...data,
+        [props.name]: data[valueKey],
+        __rendererData: {
+          ...props.data,
+          [props.name]: data[valueKey]
         }
+      }
       : data
   );
 };

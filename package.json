@@ -20,25 +20,12 @@
     "build-esm": "npm run build-esm --workspaces",
     "test": "npm test --workspaces",
     "update-snapshot": "npm run update-snapshot --workspaces",
-    "prepare": "husky install",
     "coverage": "jest --coverage --collectCoverage=v8",
     "version": "lerna version",
     "release": "npm run build --workspaces && lerna publish from-package --registry=https://registry.npmjs.org --ignore-scripts",
     "revision": "ts-node ./scripts/generate-revision.ts",
     "getChangeLog": "ts-node ./scripts/getChangeLog",
-    "publish-to-internal": "sh ./publish-to-internal.sh",
-    "stylelint": "npx stylelint 'packages/**/*.scss'",
-    "typecheck": "tsc --noEmit"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "{packages,examples}/**/{src,examples}/**/**/*.{tsx,jsx,ts}": [
-      "prettier --write"
-    ]
+    "publish-to-internal": "sh ./publish-to-internal.sh"
   },
   "dependencies": {
     "path-to-regexp": "^6.2.0",
