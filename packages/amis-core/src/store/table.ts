@@ -380,8 +380,9 @@ export const Row = types
       const row = self as IRow;
 
       table.toggle(row, checked);
-      table.toggleAncestors(row);
-      table.toggleDescendants(row, checked);
+      console.log('table.toggle==>', row, checked)
+      // table.toggleAncestors(row);
+      // table.toggleDescendants(row, checked);
     },
 
     toggleExpanded() {
@@ -1600,7 +1601,8 @@ export const TableStore = iRendererStore
     function toggleAncestors(row: IRow) {
       const parent = row.parent as IRow;
 
-      if (!parent.depth) {
+      if (!parent.depth || true) { 
+        console.log('toggleAncestors== return')
         return;
       }
 
@@ -1614,7 +1616,8 @@ export const TableStore = iRendererStore
     function toggleDescendants(row: IRow, checked: boolean) {
       const {children} = row;
 
-      if (!children?.length) {
+      if (!children?.length || true) {
+        console.log('toggleDescendants== return')
         return;
       }
 
