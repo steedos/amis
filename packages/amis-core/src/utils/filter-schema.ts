@@ -67,7 +67,6 @@ export function getExprProperties(
       (type === 'On' || type === 'Expr')
     ) {
       key = parts[1];
-
       if (type === 'On' || type === 'Expr') {
         if (
           !ctx &&
@@ -90,7 +89,7 @@ export function getExprProperties(
       exprProps[key] = value;
     } else if (
       (type === 'className' || type === 'ClassName') &&
-      !props?.[key] && // 如果 props 里面有则是 props 优先
+      // !props?.[key] && // 如果 props 里面有则是 props 优先
       value &&
       (typeof value === 'string' || isPlainObject(value))
     ) {
