@@ -86,7 +86,13 @@ export class ConditionItem extends React.Component<ConditionItemProps> {
     const value = {
       ...this.props.value,
       left: leftValue,
-      op: field?.defaultOp || config.types[field?.type]?.defaultOp || undefined,
+      op:
+        field?.defaultOp ??
+        (Array.isArray(field?.operators) && field.operators.length === 1
+          ? field.operators[0].value || field.operators[0]
+          : undefined) ??
+        config.types[field?.type]?.defaultOp ??
+        undefined,
       right: undefined
     };
     const onChange = this.props.onChange;
@@ -240,8 +246,8 @@ export class ConditionItem extends React.Component<ConditionItemProps> {
                 ref={ref}
                 allowInput={false}
                 result={
-                  __(OperationMap[value?.op as keyof typeof OperationMap]) ||
-                  options.find(option => option.value === value.op)?.label
+                  options.find(option => option.value === value.op)?.label ||
+                  __(OperationMap[value?.op as keyof typeof OperationMap])
                 }
                 onResultChange={noop}
                 onResultClick={onClick}
@@ -344,6 +350,7 @@ export class ConditionItem extends React.Component<ConditionItemProps> {
       return (
         <>
           <Expression
+            key={`${field.name}-0`}
             config={config}
             funcs={funcs}
             valueField={field}
@@ -364,6 +371,7 @@ export class ConditionItem extends React.Component<ConditionItemProps> {
           <span className={cx('CBSeprator')}>~</span>
 
           <Expression
+            key={`${field.name}-1`}
             config={config}
             funcs={funcs}
             valueField={field}
@@ -387,6 +395,7 @@ export class ConditionItem extends React.Component<ConditionItemProps> {
         return (
           <span key={i}>
             <Expression
+              key={`${field.name}-${i}`}
               config={config}
               op={op}
               funcs={funcs}
@@ -410,6 +419,7 @@ export class ConditionItem extends React.Component<ConditionItemProps> {
     }
     return (
       <Expression
+        key={`${field.name}-0`}
         config={config}
         op={op}
         funcs={funcs}
