@@ -762,8 +762,14 @@ export default class Form extends React.Component<FormProps, object> {
     const initedAt = store.initedAt;
 
     store.setInited(true);
-    const hooks: Array<(data: any) => Promise<any>> = this.hooks['init'] || [];
-    await Promise.all(hooks.map(hook => hook(data)));
+    const hooks: Array<(data: any) => Promise<any>> = (
+      this.hooks['init'] || []
+    ).sort((a: any, b: any) => a.__weight - b.__weight);
+
+    // 有步骤依赖
+    for (let hook of hooks) {
+      await hook(data);
+    }
 
     if (!isAlive(store)) {
       return;
@@ -960,9 +966,15 @@ export default class Form extends React.Component<FormProps, object> {
     store.reset(onReset);
   }
 
-  addHook(fn: () => any, type: 'validate' | 'init' | 'flush' = 'validate') {
+  addHook(
+    fn: () => any,
+    type: 'validate' | 'init' | 'flush' = 'validate',
+    weight = 0
+  ) {
     this.hooks[type] = this.hooks[type] || [];
-    this.hooks[type].push(type === 'flush' ? fn : promisify(fn));
+    const hook = type === 'flush' ? fn : promisify(fn);
+    (hook as any).__weight = weight;
+    this.hooks[type].push(hook);
     return () => {
       this.removeHook(fn, type);
       fn = noop;
