@@ -628,26 +628,6 @@ export class FormItemWrap extends React.Component<FormItemProps> {
       )
     );
 
-    this.toDispose.push(
-      reaction(
-        () => JSON.stringify(model.tmpValue),
-        () =>
-          this.mounted &&
-          this.initedApiFilled &&
-          this.syncApiAutoFill(model.tmpValue)
-      )
-    );
-
-    this.toDispose.push(
-      reaction(
-        () => JSON.stringify(model.getSelectedOptions(model.tmpValue)),
-        () =>
-          this.mounted &&
-          this.initedOptionFilled &&
-          this.syncOptionAutoFill(model.getSelectedOptions(model.tmpValue))
-      )
-    );
-
     let onInit = () => {
       this.initedOptionFilled = true;
       initAutoFill !== false &&
@@ -662,13 +642,32 @@ export class FormItemWrap extends React.Component<FormItemProps> {
           false,
           initAutoFill === 'fillIfNotSet'
         );
+
+      this.toDispose.push(
+        reaction(
+          () => JSON.stringify(model.tmpValue),
+          () =>
+            this.mounted &&
+            this.initedApiFilled &&
+            this.syncApiAutoFill(model.tmpValue)
+        )
+      );
+
+      this.toDispose.push(
+        reaction(
+          () => JSON.stringify(model.getSelectedOptions(model.tmpValue)),
+          () =>
+            this.mounted &&
+            this.initedOptionFilled &&
+            this.syncOptionAutoFill(model.getSelectedOptions(model.tmpValue))
+        )
+      );
     };
-    if (formInited || !addHook) {
-      onInit();
-    } else if (addHook) {
-      // 放在初始化的最后面
-      addHook(onInit, 'init', 'post');
-    }
+    this.toDispose.push(
+      formInited || !addHook
+        ? model.addInitHook(onInit, 999)
+        : addHook(onInit, 'init', 'post')
+    );
   }
 
   componentDidMount() {
