@@ -519,7 +519,7 @@ export interface FormItemProps extends RendererProps {
   addHook: (
     fn: Function,
     mode?: 'validate' | 'init' | 'flush',
-    weight?: number
+    enforce?: 'prev' | 'post'
   ) => () => void;
   removeHook: (fn: Function, mode?: 'validate' | 'init' | 'flush') => void;
   renderFormItems: (
@@ -667,7 +667,7 @@ export class FormItemWrap extends React.Component<FormItemProps> {
       onInit();
     } else if (addHook) {
       // 放在初始化的最后面
-      addHook(onInit, 'init', 999);
+      addHook(onInit, 'init', 'post');
     }
   }
 

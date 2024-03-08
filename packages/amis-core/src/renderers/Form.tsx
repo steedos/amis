@@ -51,6 +51,7 @@ import {isAlive} from 'mobx-state-tree';
 import type {LabelAlign} from './Item';
 import {injectObjectChain} from '../utils';
 import {reaction} from 'mobx';
+import groupBy from 'lodash/groupBy';
 
 export interface FormHorizontal {
   left?: number;
@@ -461,7 +462,7 @@ export default class Form extends React.Component<FormProps, object> {
   ];
 
   hooks: {
-    [propName: string]: Array<() => Promise<any>>;
+    [propName: string]: Array<(...args: any) => Promise<any>>;
   } = {};
   asyncCancel: () => void;
   toDispose: Array<() => void> = [];
@@ -762,14 +763,17 @@ export default class Form extends React.Component<FormProps, object> {
     const initedAt = store.initedAt;
 
     store.setInited(true);
-    const hooks: Array<(data: any) => Promise<any>> = (
-      this.hooks['init'] || []
-    ).sort((a: any, b: any) => a.__weight - b.__weight);
+    const hooks = groupBy(this.hooks['init'] || [], item =>
+      (item as any).__enforce === 'prev'
+        ? 'prev'
+        : (item as any).__enforce === 'post'
+        ? 'post'
+        : 'normal'
+    );
 
-    // 有步骤依赖
-    for (let hook of hooks) {
-      await hook(data);
-    }
+    await Promise.all((hooks.prev || []).map(hook => hook(data)));
+    await Promise.all((hooks.normal || []).map(hook => hook(data)));
+    await Promise.all((hooks.post || []).map(hook => hook(data)));
 
     if (!isAlive(store)) {
       return;
@@ -969,11 +973,11 @@ export default class Form extends React.Component<FormProps, object> {
   addHook(
     fn: () => any,
     type: 'validate' | 'init' | 'flush' = 'validate',
-    weight = 0
+    enforce?: 'prev' | 'post'
   ) {
     this.hooks[type] = this.hooks[type] || [];
     const hook = type === 'flush' ? fn : promisify(fn);
-    (hook as any).__weight = weight;
+    (hook as any).__enforce = enforce;
     this.hooks[type].push(hook);
     return () => {
       this.removeHook(fn, type);
