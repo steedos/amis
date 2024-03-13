@@ -579,7 +579,7 @@ export const HocQuickEdit =
             mode: 'normal',
             value: value ?? '',
             onChange: this.handleFormItemChange,
-            ref: this.formItemRef,
+            formItemRef: this.formItemRef,
             defaultStatic: false
           });
         }
@@ -621,7 +621,7 @@ export const HocQuickEdit =
           // 此处的readOnly会导致组件值无法传递出去，如 value: "${a + b}" 这样的 value 变化需要同步到数据域
           // || readOnly
         ) {
-          return <Component {...this.props} />;
+          return <Component {...this.props} formItemRef={this.formItemRef} />;
         }
 
         if (
