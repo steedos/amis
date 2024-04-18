@@ -168,10 +168,7 @@ export const bindEvent = (renderer: any) => {
     return (eventName?: string) => {
       // eventName用来避免过滤广播事件
       rendererEventListeners = rendererEventListeners.filter(
-        (item: RendererEventListener) =>
-          item.renderer === renderer && eventName !== undefined
-            ? item.type !== eventName
-            : true
+        (item: RendererEventListener) => item.renderer !== renderer
       );
     };
   }
