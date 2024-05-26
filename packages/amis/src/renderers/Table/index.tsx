@@ -769,6 +769,8 @@ export default class Table extends React.Component<TableProps, object> {
   @autobind
   async loadDeferredRow(row: IRow) {
     const {env} = this.props;
+    const props = this.props;
+    const store = props.store;
     const deferApi = row.data.deferApi || this.props.deferApi;
 
     if (!isEffectiveApi(deferApi)) {
@@ -784,6 +786,19 @@ export default class Table extends React.Component<TableProps, object> {
       }
 
       row.updateData(response.data);
+
+      // console.log('row set deferData...', response.data);
+      const prevSelectedRows = store.selectedRows
+        .map((item: any) => item.id)
+        .join(',');
+      store.updateSelected(props.selected || [], props.valueField);
+      // console.log('prevSelectedRows...', prevSelectedRows, props);
+      const selectedRows = store.selectedRows
+        .map((item: any) => item.id)
+        .join(',');
+      // console.log('selectedRows...', selectedRows);
+      prevSelectedRows !== selectedRows && this.syncSelected();
+
       row.markLoaded(true);
       row.setError('');
     } catch (e) {
