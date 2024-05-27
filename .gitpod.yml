@@ -16,7 +16,7 @@ tasks:
   - name: SDK
     command: |
       npm i
-      npm run build --workspace amis --workspace amis-ui
+      npm run build --workspace amis-formula --workspace amis-core --workspace amis --workspace amis-ui
       npx -y serve packages/amis/
   - name: Amis
     command: |
